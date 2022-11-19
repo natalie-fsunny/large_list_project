@@ -4,7 +4,7 @@ import { faker } from "@faker-js/faker";
 
 const users: User[] = [];
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
   users.push({
     favoriteColor: faker.color.human(),
     job: faker.name.jobTitle(),

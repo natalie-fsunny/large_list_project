@@ -7,3 +7,9 @@ export type User = {
   job: string;
   id: string;
 };
+
+export type Settings = {
+  search: { searchProperty: string; searchString: string };
+  filter: { filterProperty: string; filterString: string };
+  sort: { sortProperty: string };
+};
