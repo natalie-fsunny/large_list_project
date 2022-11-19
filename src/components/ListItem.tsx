@@ -9,28 +9,53 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { useAppDispatch } from "../hooks";
+import { deleteUser } from "../store/usersReducer";
 import { User } from "../types";
 import { getColorByName } from "../utils";
 
+interface ListItemProps {
+  user: User;
+  onOpen: () => void;
+  setEditingUserState: React.Dispatch<React.SetStateAction<User>>;
+}
+
 export const ListItem = ({
-  email,
-  favoriteColor,
-  job,
-  name,
-  petName,
-  petType,
-}: User) => {
+  user: { email, favoriteColor, job, name, petName, petType, id },
+  onOpen,
+  setEditingUserState,
+}: ListItemProps) => {
   const [isLargerThan450] = useMediaQuery("(min-width: 450px)");
+  const dispatch = useAppDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteUser(id));
+  };
+
+  const handleEdit = () => {
+    setEditingUserState({
+      email,
+      favoriteColor,
+      job,
+      name,
+      petName,
+      petType,
+      id,
+    });
+    onOpen();
+  };
+
   return (
     <AccordionItem>
       <AccordionButton display="flex" justifyContent="space-between">
-        <Box display="flex" gap="20px" alignItems="center">
+        <Box display="flex" gap="10px" alignItems="center">
           <Box
             backgroundColor={getColorByName(favoriteColor)}
             height="30px"
             width="30px"
             borderRadius="50%"
             border="1px solid black"
+            flex="0 0 auto"
           ></Box>
           <Box
             textAlign="left"
@@ -54,8 +79,8 @@ export const ListItem = ({
       </AccordionButton>
       <AccordionPanel>
         <ButtonGroup>
-          <Button>Edit</Button>
-          <Button>Delete</Button>
+          <Button onClick={handleEdit}>Edit</Button>
+          <Button onClick={handleDelete}>Delete</Button>
         </ButtonGroup>
       </AccordionPanel>
     </AccordionItem>
