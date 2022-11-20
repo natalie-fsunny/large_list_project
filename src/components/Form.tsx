@@ -49,13 +49,7 @@ export const Form = ({
             </option>
           )}
           {Object.keys(colors).map((color) => (
-            <option
-              key={color}
-              value={color}
-              style={{
-                backgroundColor: colors[color as keyof typeof colors],
-              }}
-            >
+            <option key={color} value={color}>
               {color}
             </option>
           ))}

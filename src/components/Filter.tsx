@@ -97,13 +97,7 @@ export const Filter = ({ setSettings, settings }: FilterProps) => {
                     </option>
                   ))
                 : Object.keys(colors).map((color) => (
-                    <option
-                      value={color}
-                      key={color}
-                      style={{
-                        backgroundColor: getColorByName(color),
-                      }}
-                    >
+                    <option value={color} key={color}>
                       {color}
                     </option>
                   ))}

@@ -69,7 +69,7 @@ export const ListItem = ({
           ></Box>
           <Box
             textAlign="left"
-            width={isLargerThan450 ? "100%" : "220px"}
+            width={isLargerThan450 ? "100%" : "200px"}
             display="flex"
             flexDirection="column"
           >
