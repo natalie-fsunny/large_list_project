@@ -22,7 +22,7 @@ export const Search = ({ setSettings, settings }: SearchProps) => {
   ) => {
     setSettings((prev) => ({
       ...prev,
-      search: { ...prev.search, searchProperty: e.target.value },
+      search: { searchString: "", searchProperty: e.target.value },
     }));
   };
 
