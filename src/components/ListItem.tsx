@@ -20,6 +20,7 @@ interface ListItemProps {
   setEditingUserState: React.Dispatch<React.SetStateAction<User>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   usersCount: number;
+  setDeletedUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ListItem = ({
@@ -28,6 +29,7 @@ export const ListItem = ({
   setEditingUserState,
   setCurrentPage,
   usersCount,
+  setDeletedUserId,
 }: ListItemProps) => {
   const [isLargerThan450] = useMediaQuery("(min-width: 450px)");
   const dispatch = useAppDispatch();
@@ -36,6 +38,7 @@ export const ListItem = ({
     if ((usersCount - 1) % 10 === 0) {
       setCurrentPage((prev) => prev - 1);
     }
+    setDeletedUserId(id);
     dispatch(deleteUser(id));
   };
 

@@ -8,14 +8,18 @@ import { editUser } from "../store/usersReducer";
 
 interface ListProps {
   usersForDisplaying: User[];
+  setUsersForDisplaying: React.Dispatch<React.SetStateAction<User[]>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setDeletedUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const List = ({
   usersForDisplaying,
   currentPage,
   setCurrentPage,
+  setDeletedUserId,
+  setUsersForDisplaying,
 }: ListProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [editingUserState, setEditingUserState] = useState<User>({
@@ -31,6 +35,14 @@ export const List = ({
 
   const handleSaveChanges = () => {
     dispatch(editUser(editingUserState));
+    setUsersForDisplaying((prev) => {
+      const newUsers = [...prev];
+      const foundIndex = prev.findIndex(
+        (user) => user.id === editingUserState.id
+      );
+      newUsers[foundIndex] = { ...editingUserState };
+      return newUsers;
+    });
     setEditingUserState({
       email: "",
       petType: "cat",
@@ -78,6 +90,7 @@ export const List = ({
               setEditingUserState={setEditingUserState}
               user={user}
               usersCount={usersForDisplaying.length}
+              setDeletedUserId={setDeletedUserId}
             />
           ))}
       </Accordion>

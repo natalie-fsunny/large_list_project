@@ -55,7 +55,9 @@ export const Form = ({
               style={{
                 backgroundColor: colors[color as keyof typeof colors],
               }}
-            ></option>
+            >
+              {color}
+            </option>
           ))}
         </Select>
       </FormControl>

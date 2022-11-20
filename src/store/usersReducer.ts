@@ -41,7 +41,7 @@ const usersSlice = createSlice({
       const foundIndex = state.users.findIndex(
         (user) => user.id === action.payload.id
       );
-      state.users[foundIndex] = action.payload;
+      state.users[foundIndex] = { ...action.payload };
     },
   },
 });

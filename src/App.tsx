@@ -37,6 +37,7 @@ function App() {
     sort: { sortProperty: "name" },
   });
   const [userIsAdded, setUserIsAdded] = useState(false);
+  const [deletedUserId, setDeletedUserId] = useState("");
   const dispatch = useAppDispatch();
 
   const handleFilterSearchSortUsers = () => {
@@ -99,6 +100,12 @@ function App() {
     }
   }, [userIsAdded, settings]);
 
+  useEffect(() => {
+    setUsersForDisplaying((prev) =>
+      prev.filter((user) => user.id !== deletedUserId)
+    );
+  }, [deletedUserId]);
+
   return (
     <ChakraProvider>
       <Container mt="30px">
@@ -132,6 +139,8 @@ function App() {
           usersForDisplaying={usersForDisplaying}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          setDeletedUserId={setDeletedUserId}
+          setUsersForDisplaying={setUsersForDisplaying}
         />
       </Container>
     </ChakraProvider>

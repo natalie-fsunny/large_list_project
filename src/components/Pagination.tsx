@@ -68,7 +68,7 @@ export const Pagination = ({
 
   return (
     <Box p="10px 0" borderTop="1px solid black" borderBottom="2px solid black">
-      <ButtonGroup>
+      <ButtonGroup display="flex" flexWrap="wrap" gap="10px" justifyContent="center">
         <Button isDisabled={currentPage === 1} onClick={handlePrevPage}>
           {"<"}
         </Button>

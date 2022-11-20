@@ -103,7 +103,9 @@ export const Filter = ({ setSettings, settings }: FilterProps) => {
                       style={{
                         backgroundColor: getColorByName(color),
                       }}
-                    ></option>
+                    >
+                      {color}
+                    </option>
                   ))}
             </Select>
           </FormControl>
