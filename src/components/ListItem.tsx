@@ -18,17 +18,24 @@ interface ListItemProps {
   user: User;
   onOpen: () => void;
   setEditingUserState: React.Dispatch<React.SetStateAction<User>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  usersCount: number;
 }
 
 export const ListItem = ({
   user: { email, favoriteColor, job, name, petName, petType, id },
   onOpen,
   setEditingUserState,
+  setCurrentPage,
+  usersCount,
 }: ListItemProps) => {
   const [isLargerThan450] = useMediaQuery("(min-width: 450px)");
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
+    if ((usersCount - 1) % 10 === 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
     dispatch(deleteUser(id));
   };
 

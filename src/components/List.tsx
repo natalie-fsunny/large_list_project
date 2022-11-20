@@ -8,9 +8,15 @@ import { editUser } from "../store/usersReducer";
 
 interface ListProps {
   usersForDisplaying: User[];
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const List = ({ usersForDisplaying }: ListProps) => {
+export const List = ({
+  usersForDisplaying,
+  currentPage,
+  setCurrentPage,
+}: ListProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [editingUserState, setEditingUserState] = useState<User>({
     email: "",
@@ -34,7 +40,7 @@ export const List = ({ usersForDisplaying }: ListProps) => {
       name: "",
       petName: "",
     });
-    onClose()
+    onClose();
   };
 
   const handleCancelChanges = () => {
@@ -47,7 +53,7 @@ export const List = ({ usersForDisplaying }: ListProps) => {
       name: "",
       petName: "",
     });
-    onClose()
+    onClose();
   };
 
   return (
@@ -62,14 +68,18 @@ export const List = ({ usersForDisplaying }: ListProps) => {
         onClose={onClose}
       />
       <Accordion allowToggle>
-        {usersForDisplaying.map((user) => (
-          <ListItem
-            key={user.id}
-            onOpen={onOpen}
-            setEditingUserState={setEditingUserState}
-            user={user}
-          />
-        ))}
+        {usersForDisplaying
+          .slice((currentPage - 1) * 10, currentPage * 10)
+          .map((user) => (
+            <ListItem
+              setCurrentPage={setCurrentPage}
+              key={user.id}
+              onOpen={onOpen}
+              setEditingUserState={setEditingUserState}
+              user={user}
+              usersCount={usersForDisplaying.length}
+            />
+          ))}
       </Accordion>
     </>
   );

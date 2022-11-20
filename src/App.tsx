@@ -1,22 +1,43 @@
 import { useEffect, useState } from "react";
-import { Box, ChakraProvider, Container } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ChakraProvider,
+  Container,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Filter } from "./components/Filter";
 import { List } from "./components/List";
 import { Pagination } from "./components/Pagination";
 import { Search } from "./components/Search";
 import { Sort } from "./components/Sort";
-import { useAppSelector } from "./hooks";
+import { useAppDispatch, useAppSelector } from "./hooks";
 import { Settings, User } from "./types";
+import { CustomModal } from "./components/Modal";
+import { addUser } from "./store/usersReducer";
 
 function App() {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { users } = useAppSelector((state) => state.usersReducer);
   const [usersForDisplaying, setUsersForDisplaying] = useState(users);
-
+  const [addingUserState, setAddingUserState] = useState<User>({
+    email: "",
+    petType: "cat",
+    favoriteColor: "black",
+    id: "",
+    job: "",
+    name: "",
+    petName: "",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLastPage, setIsLastPage] = useState(usersForDisplaying.length <= 10);
   const [settings, setSettings] = useState<Settings>({
-    search: { searchProperty: "name", searchString: "" },
-    filter: { filterProperty: "petType", filterString: "" },
+    search: { searchProperty: "", searchString: "" },
+    filter: { filterProperty: "", filterString: "" },
     sort: { sortProperty: "name" },
   });
+  const [userIsAdded, setUserIsAdded] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleFilterSearchSortUsers = () => {
     let newUsers = [...users];
@@ -40,20 +61,78 @@ function App() {
       )
     );
     setUsersForDisplaying(newUsers);
+    setCurrentPage(1);
   };
 
-  useEffect(() => handleFilterSearchSortUsers(), [users, settings]);
+  const handleSaveChanges = () => {
+    setUserIsAdded(true);
+    dispatch(addUser(addingUserState));
+    setAddingUserState({
+      email: "",
+      petType: "cat",
+      favoriteColor: "black",
+      id: "",
+      job: "",
+      name: "",
+      petName: "",
+    });
+    onClose();
+  };
+
+  const handleCancelChanges = () => {
+    setAddingUserState({
+      email: "",
+      petType: "cat",
+      favoriteColor: "black",
+      id: "",
+      job: "",
+      name: "",
+      petName: "",
+    });
+    onClose();
+  };
+
+  useEffect(() => {
+    handleFilterSearchSortUsers();
+    if (userIsAdded) {
+      setUserIsAdded(false);
+    }
+  }, [userIsAdded, settings]);
 
   return (
     <ChakraProvider>
       <Container mt="30px">
+        <CustomModal
+          handleCancelChanges={handleCancelChanges}
+          handleSaveChanges={handleSaveChanges}
+          isOpen={isOpen}
+          onClose={onClose}
+          setUserState={setAddingUserState}
+          title={"Add user"}
+          userState={addingUserState}
+        />
         <Box>
+          <Box p="10px 0" borderBottom="1px solid black">
+            <Button colorScheme="yellow" onClick={onOpen}>
+              Add user
+            </Button>
+          </Box>
           <Search settings={settings} setSettings={setSettings} />
           <Filter settings={settings} setSettings={setSettings} />
           <Sort settings={settings} setSettings={setSettings} />
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            isLastPage={isLastPage}
+            setIsLastPage={setIsLastPage}
+            usersForDisplaying={usersForDisplaying}
+          />
         </Box>
-        <List usersForDisplaying={usersForDisplaying} />
+        <List
+          usersForDisplaying={usersForDisplaying}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </Container>
     </ChakraProvider>
   );
